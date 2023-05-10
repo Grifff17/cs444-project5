@@ -6,13 +6,13 @@
 
 unsigned char *bread(int block_num, unsigned char *block) {
     lseek(image_fd, 4096*block_num, SEEK_SET);
-    read(image_fd, block, sizeof(block));
+    read(image_fd, block, BYTES_IN_BLOCK);
     return block;
 }
 
 void bwrite(int block_num, unsigned char *block) {
     lseek(image_fd, 4096*block_num, SEEK_SET);
-    write(image_fd, block, sizeof(block));
+    write(image_fd, block, BYTES_IN_BLOCK);
 }
 
 int alloc(void) {

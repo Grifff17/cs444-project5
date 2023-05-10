@@ -16,11 +16,11 @@ void test_block(void) {
 
     unsigned char inblock[4096] = "asdf";
     bwrite(15, inblock);
-    CTEST_ASSERT(memcmp(inblock, bread(15, outblock), 4) == 0, "testing block read and write");
+    CTEST_ASSERT(memcmp(inblock, bread(15, outblock), BYTES_IN_BLOCK) == 0, "testing block read and write");
 
     unsigned char inblock2[4096] = "ghjk";
     bwrite(15, inblock2);
-    CTEST_ASSERT(memcmp(inblock2, bread(15, outblock), 4) == 0, "testing block overwriting");
+    CTEST_ASSERT(memcmp(inblock2, bread(15, outblock), BYTES_IN_BLOCK) == 0, "testing block overwriting");
 
     CTEST_ASSERT(alloc() == 0, "testing alloc with empty block map");
 
@@ -60,7 +60,7 @@ void test_mkfs(void) {
     unsigned char block[4096] = {0};
     mkfs();
 
-    CTEST_ASSERT(memcmp(bread(8, outblock), block, 4) == 0, "testing mkfs sets all blocks to 0");
+    CTEST_ASSERT(memcmp(bread(8, outblock), block, BYTES_IN_BLOCK) == 0, "testing mkfs sets all blocks to 0");
 
     CTEST_ASSERT(alloc() == 7, "testing mkfs allocates blocks correctly");
     
