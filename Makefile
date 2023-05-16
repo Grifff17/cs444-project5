@@ -2,7 +2,7 @@ CCOPTS=-Wall -Wextra
 
 .PHONY: test clean
 
-simfs.a: block.o image.o free.o inode.o mkfs.o
+simfs.a: block.o image.o free.o inode.o mkfs.o pack.o
 	ar rcs $@ $^
 
 block.o: block.c block.h
@@ -18,6 +18,9 @@ inode.o: inode.c inode.h
 	gcc $(CCOPTS) -c $<
 
 mkfs.o: mkfs.c mkfs.h
+	gcc $(CCOPTS) -c $<
+
+pack.o: pack.c pack.h
 	gcc $(CCOPTS) -c $<
 
 simfs_test: simfs_test.c simfs.a
