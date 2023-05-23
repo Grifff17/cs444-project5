@@ -2,7 +2,11 @@ CCOPTS=-Wall -Wextra
 
 .PHONY: test clean
 
-simfs.a: block.o image.o free.o inode.o mkfs.o pack.o
+simfs: simfs.a
+	gcc $(CCOPTS) -o $@ $^
+	./simfs
+
+simfs.a: block.o image.o free.o inode.o mkfs.o pack.o directory.o ls.o
 	ar rcs $@ $^
 
 block.o: block.c block.h
@@ -21,6 +25,12 @@ mkfs.o: mkfs.c mkfs.h
 	gcc $(CCOPTS) -c $<
 
 pack.o: pack.c pack.h
+	gcc $(CCOPTS) -c $<
+
+directory.o: directory.c directory.h
+	gcc $(CCOPTS) -c $<
+
+ls.o: ls.c ls.h
 	gcc $(CCOPTS) -c $<
 
 simfs_test: simfs_test.c simfs.a

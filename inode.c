@@ -30,6 +30,7 @@ struct inode *ialloc(void) {
     for(int i = 0; i < INODE_PTR_COUNT; i++) {
         node->block_ptr[i] = 0;
     }
+    node->inode_num = free_num;
     write_inode(node);
 
     return node;

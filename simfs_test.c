@@ -9,6 +9,8 @@
 #include "image.h"
 #include "mkfs.h"
 #include "pack.h"
+#include "directory.h"
+#include "ls.h"
 
 
 void test_block(void) {
@@ -91,7 +93,14 @@ void test_mkfs(void) {
 
     CTEST_ASSERT(memcmp(bread(8, outblock), block, BYTES_IN_BLOCK) == 0, "testing mkfs sets all blocks to 0");
 
-    CTEST_ASSERT(alloc() == 7, "testing mkfs allocates blocks correctly");
+    CTEST_ASSERT(alloc() == 8, "testing mkfs allocates blocks correctly");
+
+    struct directory *dir;
+    struct directory_entry ent;
+    dir = directory_open(0);
+    directory_get(dir, &ent);
+    CTEST_ASSERT(strcmp(ent.name, ".") == 0, "testing mkfs creates root directory, as well as open, get, and close directory");
+    directory_close(dir);
     
     image_close();
 }
