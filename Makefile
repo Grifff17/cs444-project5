@@ -6,7 +6,7 @@ simfs: simfs.a
 	gcc $(CCOPTS) -o $@ $^
 	./simfs
 
-simfs.a: block.o image.o free.o inode.o mkfs.o pack.o directory.o ls.o
+simfs.a: block.o image.o free.o inode.o mkfs.o pack.o directory.o ls.o dirbasename.o
 	ar rcs $@ $^
 
 block.o: block.c block.h
@@ -31,6 +31,9 @@ directory.o: directory.c directory.h
 	gcc $(CCOPTS) -c $<
 
 ls.o: ls.c ls.h
+	gcc $(CCOPTS) -c $<
+
+dirbasename.o: dirbasename.c dirbasename.h
 	gcc $(CCOPTS) -c $<
 
 simfs_test: simfs_test.c simfs.a

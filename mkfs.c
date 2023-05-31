@@ -39,6 +39,9 @@ void mkfs(void) {
 //     image_open("mkfs_testfile", 0);
 //     mkfs();
 //     ls();
+//     directory_make("/foo");
+//     printf("\n");
+//     ls();
 //     image_close();
 //     return 0;   
 // }

@@ -10,6 +10,7 @@
 #include "mkfs.h"
 #include "pack.h"
 #include "directory.h"
+#include "dirbasename.h"
 #include "ls.h"
 
 
@@ -105,6 +106,26 @@ void test_mkfs(void) {
     image_close();
 }
 
+void test_directory(void) {
+    image_open("directory_testfile", 0);
+    mkfs();
+
+    struct inode *in = namei("/");
+    CTEST_ASSERT(in->inode_num == 0, "testing namei on root directory");
+
+    directory_make("/foo");
+    struct directory *dir;
+    struct directory_entry ent;
+    dir = directory_open(0);
+    directory_get(dir, &ent);
+    directory_get(dir, &ent);
+    directory_get(dir, &ent);
+    CTEST_ASSERT(strcmp(ent.name, "foo") == 0, "testing directory_make creates directory");
+    directory_close(dir);
+
+    image_close();
+}
+
 int main(void)
 {
     CTEST_VERBOSE(1);
@@ -116,6 +137,8 @@ int main(void)
     test_mkfs();
 
     test_inode();
+
+    test_directory();
 
     CTEST_RESULTS();
 
