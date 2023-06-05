@@ -54,27 +54,15 @@ struct inode *namei(char *path){
 
 int directory_make(char *path) {
 
-    // printf("A\n");
-    // fflush(stdout);
-
     char dirpath[1024];
     get_dirname(path, dirpath);
-
-    // printf("A2\n");
-    // fflush(stdout);
 
     char dirname[1024];
     get_basename(path, dirname);
 
-    // printf("B\n");
-    // fflush(stdout);
-
     struct inode* parentnode = namei(dirpath);
     struct inode* newnode = ialloc();
     int newnode_num = alloc();
-
-    // printf("C\n");
-    // fflush(stdout);
 
     unsigned char block[BLOCK_SIZE];
     write_u16(block, newnode->inode_num);
@@ -82,15 +70,9 @@ int directory_make(char *path) {
     write_u16(block+DIRECTORY_ENTRY_LENGTH, parentnode->inode_num);
     strcpy((char*)block+2+DIRECTORY_ENTRY_LENGTH, "..");
 
-    // printf("D\n");
-    // fflush(stdout);
-
     newnode->flags = 2;
     newnode->size = DIRECTORY_ENTRY_LENGTH*2;
     newnode->block_ptr[0] = newnode_num;
-
-    // printf("E\n");
-    // fflush(stdout);
 
     bwrite(newnode->inode_num, block);
     int numitems = parentnode->size/DIRECTORY_ENTRY_LENGTH;
@@ -98,20 +80,11 @@ int directory_make(char *path) {
     unsigned char parentblock[BLOCK_SIZE];
     bread(parentnode->block_ptr[parent_block_num], parentblock);
 
-    // printf("F\n");
-    // fflush(stdout);
-
     write_u16(parentblock+(DIRECTORY_ENTRY_LENGTH*(numitems%128)), newnode->inode_num);
     strcpy((char*)parentblock+2+(DIRECTORY_ENTRY_LENGTH*(numitems%128)), dirname);
 
-    // printf("G\n");
-    // fflush(stdout);
-
     bwrite(parentnode->block_ptr[parent_block_num], parentblock);
     parentnode->size += DIRECTORY_ENTRY_LENGTH;
-
-    // printf("H\n");
-    // fflush(stdout);
 
     iput(parentnode);
     iput(newnode);
